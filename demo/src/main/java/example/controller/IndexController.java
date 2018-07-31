@@ -1,6 +1,5 @@
 package example.controller;
 
-import example.dao.UserDao;
 import example.entiy.User;
 import example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,14 @@ public class IndexController {
     @Autowired
     private UserService ser;
 
-    @RequestMapping("/test")
+    @RequestMapping("/index")
     public String index(Model model) {
         List<User> list=ser.getUsers();
         model.addAttribute("users",list);
+
+        String token=ser.createToken("001","abc");
+        model.addAttribute("token",token);
+
         return "index";
     }
 
@@ -34,18 +37,17 @@ public class IndexController {
     @RequestMapping("/AddUser")
     public String AddUser(@ModelAttribute("form") User us){
         ser.Add(us);
-        return "redirect:test";
+        return "redirect:index";
     }
 
     @RequestMapping("/Delete")
     public String delete(HttpServletRequest request){
         String id=request.getParameter("id");
-        System.out.println(id);
         ser.Delete(id);
-        return "redirect:test";
+        return "redirect:index";
     }
 
-    @RequestMapping("/Update")
+    @RequestMapping("/Update")  //jsp页面
     public String update(HttpServletRequest request,Model model){
         String id=request.getParameter("id");
         List<User> list=ser.findUser(id);
@@ -53,9 +55,9 @@ public class IndexController {
         return "Update";
     }
 
-    @RequestMapping("/UpdateUser")
+    @RequestMapping("/UpdateUser")  //更新信息
     public String updateUser(@ModelAttribute("form") User us){
         ser.update(us);
-        return "redirect:test";
+        return "redirect:index";
     }
 }

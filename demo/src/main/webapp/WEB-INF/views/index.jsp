@@ -1,5 +1,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="example.entiy.User" %>
+<%@ page import="example.service.UserService" %>
+<%@ page import="java.util.Map" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -7,6 +10,13 @@
     <title>Index</title>
 </head>
 <body>
+    <%
+        String token=(String) request.getAttribute("token");
+        UserService ser=new UserService();
+        Map<String,String> map=ser.veifyToken(token);
+        String id=map.get("id");
+        String name=map.get("name");
+    %>
     <table align="center" border="1">
         <tr>
             <th>编号</th>
